@@ -1,0 +1,13 @@
+services:
+  aktipiti-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aktipiti-web
+    restart: unless-stopped
+    networks:
+      - coolify
+
+networks:
+  coolify:
+    external: true

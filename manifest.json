@@ -1,0 +1,35 @@
+{
+  "name": "Aktipiti Kompozer",
+  "short_name": "Aktipiti",
+  "description": "Asisten Penyusun Bahan Isian e-Kinerja ASN Indonesia",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#0f9d58",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icons/icon32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/app-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

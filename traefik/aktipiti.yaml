@@ -1,0 +1,29 @@
+http:
+  middlewares:
+    aktipiti-redirect-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+  routers:
+    aktipiti-http:
+      entryPoints:
+        - http
+      rule: Host(`aktipiti.bangkit.io`)
+      service: aktipiti-service
+      middlewares:
+        - aktipiti-redirect-https
+
+    aktipiti-https:
+      entryPoints:
+        - https
+      rule: Host(`aktipiti.bangkit.io`)
+      service: aktipiti-service
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    aktipiti-service:
+      loadBalancer:
+        servers:
+          - url: "http://aktipiti-web:80"

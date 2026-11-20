@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Aktipiti Kompozer — Panduan e-Kinerja ASN Indonesia</title>
+  
+  <!-- PWA & Mobile Meta -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f9d58">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Aktipiti Kompozer">
+  <link rel="apple-touch-icon" href="icons/icon128.png">
+  <link rel="icon" type="image/png" href="icons/icon32.png">
+
+  <!-- Plus Jakarta Sans Font (Modern, Humanis & Elegan) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    
+    <!-- TOP HEADER (SESUAI TEMA EKSTENSI: GRADASI KUNING HANGAT & HIJAU PROFESIONAL) -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="brand-logo-wrap">
+          <img src="icons/icon48.png" alt="Logo Aktipiti Kompozer" class="brand-logo" onerror="this.style.display='none'; document.getElementById('logoFallbackEmoji').style.display='inline';">
+          <span id="logoFallbackEmoji" class="logo-emoji-fallback" style="display: none;">⚡</span>
+        </div>
+        <div class="brand-titles">
+          <h1 class="brand-name">Aktipiti Kompozer</h1>
+          <p class="brand-tagline">Gampang, Akurat, Pas Pisan <span class="version-tag">v1.6</span></p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- INDIKATOR MESIN AKTIF (SEJAJAR DENGAN IKON PENGATURAN) -->
+        <button type="button" id="headerEngineBadge" class="header-engine-pill" title="Klik untuk mengubah pilihan Mesin Narasi AI">
+          <span class="engine-indicator-dot"></span>
+          <span class="engine-symbol">⚡</span>
+          <span id="headerEngineText" class="header-engine-name">Mesin Cerdas</span>
+        </button>
+
+        <!-- STATUS CLOUD GOOGLE SHEET -->
+        <button type="button" id="cloudStatusBadge" class="cloud-badge" title="Klik untuk kelola memori Google Sheet">
+          ☁️ <span id="cloudStatusText" class="cloud-badge-text">111 Template</span>
+        </button>
+
+        <!-- TOMBOL PENGATURAN -->
+        <button type="button" id="btnOpenSettings" class="btn-icon" title="Pengaturan & Pilihan Mesin AI" aria-label="Pengaturan">
+          ⚙️
+        </button>
+      </div>
+    </header>
+
+    <!-- PWA MOBILE INSTALL BANNER -->
+    <div id="pwaInstallBanner" class="pwa-banner hidden">
+      <div class="pwa-content">
+        <span class="pwa-icon">📲</span>
+        <div class="pwa-text">
+          <strong>Pasang di Layar Utama HP</strong>
+          <small>Akses cepat sehari-hari di Chrome tanpa instal file APK!</small>
+        </div>
+      </div>
+      <div class="pwa-actions">
+        <button type="button" id="btnInstallPwa" class="btn-pwa-install">Pasang</button>
+        <button type="button" id="btnClosePwaBanner" class="btn-pwa-close">✕</button>
+      </div>
+    </div>
+
+    <!-- REKONSTRUKSI NAVIGASI MENU (LEBIH ERGONOMIS & NYAMAN: 3 PILIHAN ESENSIAL) -->
+    <nav class="nav-tabs">
+      <button type="button" class="tab-btn active" data-tab="tab-composer">
+        <span class="tab-icon">✍️</span>
+        <span class="tab-label">Komposer</span>
+      </button>
+      <button type="button" class="tab-btn" data-tab="tab-catalog">
+        <span class="tab-icon">📚</span>
+        <span class="tab-label">Katalog Tupoksi</span>
+        <span class="tab-badge">111+81</span>
+      </button>
+      <button type="button" class="tab-btn" data-tab="tab-guidance">
+        <span class="tab-icon">💡</span>
+        <span class="tab-label">Standar & Aturan</span>
+      </button>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <main class="main-content">
+
+      <!-- ================================================================= -->
+      <!-- TAB 1: KOMPOSER AKTIVITAS (FORM INPUT VS HASIL GENERATE KONTRAS) -->
+      <!-- ================================================================= -->
+      <div id="tab-composer" class="tab-content active">
+        
+        <!-- =============================================================== -->
+        <!-- BAGIAN 1: FORMULIR INPUT PEKERJAAN (YANG HARUS DIISI PENGGUNA) -->
+        <!-- =============================================================== -->
+        <section class="card input-card">
+          <div class="step-banner step-input-banner">
+            <div class="step-tag">
+              <span class="step-number">1</span>
+              <span class="step-title">FORMULIR INPUT PEKERJAAN</span>
+            </div>
+            <span class="step-hint">Silakan isi tanggal & rincian pekerjaan Anda</span>
+          </div>
+
+          <form id="activityForm" onsubmit="return false;" class="input-form-body">
+            
+            <!-- Tanggal Pelaksanaan Kegiatan -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="tanggalInput" class="form-label">
+                  Tanggal Pelaksanaan <span class="required-star">*</span>
+                </label>
+                <div class="quick-date-btns">
+                  <button type="button" id="btnToday" class="btn-chip active">Hari Ini</button>
+                  <button type="button" id="btnYesterday" class="btn-chip">Kemarin</button>
+                </div>
+              </div>
+              <div class="input-with-preview">
+                <input type="date" id="tanggalInput" class="form-control date-control" required>
+                <div id="tanggalPreviewBadge" class="date-preview-badge">Memuat tanggal...</div>
+              </div>
+            </div>
+
+            <!-- Uraian / Ringkasan Pekerjaan -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="namaKegiatanInput" class="form-label">
+                  Ringkasan / Uraian Pekerjaan <span class="required-star">*</span>
+                </label>
+                <span id="namaKegiatanCounter" class="counter-badge neutral">0 / min. 15</span>
+              </div>
+              <textarea id="namaKegiatanInput" class="form-control textarea-input" rows="3" 
+                placeholder="Tuliskan pekerjaan yang Anda lakukan (misal: Melakukan siaran langsung agenda gubernur, Mengikuti apel pagi daring, Menyusun draf rilis publikasi...)" required></textarea>
+              
+              <!-- TOPIK CEPAT KEDINASAN (MEMPERMUDAH INPUT SEKALI KLIK) -->
+              <div class="quick-topics-wrap">
+                <span class="topics-heading">💡 Topik Cepat Kedinasan:</span>
+                <div class="topics-chips-scroll">
+                  <button type="button" class="chip-example" data-text="Mengikuti Apel Pagi kedinasan secara daring/luring">Apel Pagi</button>
+                  <button type="button" class="chip-example" data-text="Melaksanakan live streaming siaran kegiatan resmi kedinasan">Live Streaming</button>
+                  <button type="button" class="chip-example" data-text="Melakukan dokumentasi dan pengumpulan bahan visual kegiatan kedinasan">Dokumentasi Visual</button>
+                  <button type="button" class="chip-example" data-text="Mengelola dan memperbarui konten informasi pada kanal media sosial pemerintah">Pengelolaan Medsos</button>
+                  <button type="button" class="chip-example" data-text="Mengidentifikasi dan merekap isu yang berkembang di masyarakat dan media">Rekap Isu Media</button>
+                  <button type="button" class="chip-example" data-text="Mendukung pelaksanaan konferensi pers atau kegiatan komunikasi publik">Konferensi Pers</button>
+                  <button type="button" class="chip-example" data-text="Menyusun dokumentasi administrasi dan arsip kegiatan kedinasan">Pengarsipan Dokumen</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- KOTAK REKOMENDASI FORM AKTIVITAS (OTOMATIS COCOK) -->
+            <div class="recommendation-preview-box">
+              <div class="rec-top-row">
+                <div class="rec-icon-title">
+                  <span class="rec-pin">🎯</span>
+                  <span class="rec-label-text">Pilihan Form Aktivitas e-Kinerja (Katalog 81 Butir):</span>
+                </div>
+                <button type="button" id="btnOpenCatalogModal" class="btn-catalog-link" title="Cari atau pilih manual dari katalog">
+                  🔍 Cari di Katalog
+                </button>
+              </div>
+              <div class="rec-match-card">
+                <div id="recActivityBadge" class="rec-activity-name">Ketik pekerjaan di atas untuk rekomendasi otomatis...</div>
+                <div id="recActivityMeta" class="rec-activity-details">Kategori: — | Durasi: —</div>
+              </div>
+            </div>
+
+            <!-- ALERT ERROR -->
+            <div id="alertBox" class="alert-box hidden" role="alert">
+              <span class="alert-icon">⚠️</span>
+              <div id="alertMessage" class="alert-text"></div>
+            </div>
+
+            <!-- TOMBOL AKSI INPUT (MENONJOL & JELAS) -->
+            <div class="input-actions-bar">
+              <button type="button" id="btnGenerate" class="btn-generate-main" title="Susun narasi resmi standar BKD">
+                <span class="btn-sparkle-icon">✨</span>
+                <span id="btnGenerateText">Generate Narasi e-Kinerja</span>
+              </button>
+              <button type="button" id="btnQuickPaste" class="btn-secondary-action" title="Tempel cepat teks dari clipboard">
+                📥 Tempel
+              </button>
+              <button type="button" id="btnReset" class="btn-reset-action" title="Bersihkan input">
+                🗑️ Bersihkan
+              </button>
+            </div>
+
+            <!-- LOADING SPINNER -->
+            <div id="loadingIndicator" class="loading-state hidden">
+              <div class="spinner-circle"></div>
+              <div class="loading-texts">
+                <strong id="loadingStatusText">Sedang menyusun naskah kedinasan...</strong>
+                <small>Menyesuaikan struktur 300–500 karakter dan format baku BKD</small>
+              </div>
+            </div>
+
+          </form>
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- BAGIAN 2: HASIL GENERATE & REKOMENDASI (HASIL SIAP DISALIN)    -->
+        <!-- SANGAT KONTRAS DENGAN FORM INPUT: KARTU ELEVATED DENGAN AKSEN  -->
+        <!-- =============================================================== -->
+        <section id="resultsSection" class="card results-card hidden">
+          
+          <div class="step-banner step-result-banner">
+            <div class="step-tag">
+              <span class="step-number-result">2</span>
+              <div>
+                <span class="step-title-result">HASIL KOMPOSISI e-KINERJA (SIAP DISALIN)</span>
+                <span class="step-subtitle-result">Telah divalidasi sesuai standar verifikasi e-Kinerja BKN &amp; BKD</span>
+              </div>
+            </div>
+            <div class="result-top-quick-actions">
+              <button type="button" id="btnCopyAll" class="btn-copy-all-primary" title="Salin seluruh draf sekaligus ke clipboard">
+                📋 Salin Semua Bagian
+              </button>
+              <button type="button" id="btnSendToSheet" class="btn-sheet-secondary" title="Kirim rekaman ini ke Google Sheet Anda">
+                📊 Ke Sheet
+              </button>
+            </div>
+          </div>
+
+          <!-- CHECKLIST KEPATUHAN STANDAR BKD (MEMBERIKAN RASA TENANG & AMAN) -->
+          <div class="compliance-checklist-card">
+            <div class="comp-header">
+              <span class="comp-shield">🛡️</span>
+              <strong>Pemeriksaan Kelayakan Otomatis BKD:</strong>
+            </div>
+            <div class="comp-badges-grid">
+              <div id="compKeterangan" class="comp-item valid">
+                <span class="comp-icon">✓</span> Keterangan 300–500 Karakter
+              </div>
+              <div id="compKesimpulan" class="comp-item valid">
+                <span class="comp-icon">✓</span> Kesimpulan 300–500 Karakter
+              </div>
+              <div id="compActionPlan" class="comp-item valid">
+                <span class="comp-icon">✓</span> Action Plan Runut Berurutan
+              </div>
+              <div id="compNoBullets" class="comp-item valid">
+                <span class="comp-icon">✓</span> Bebas Simbol Terlarang (Tanpa Bullet)
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 BLOK HASIL DENGAN TOMBOL SALIN BESAR DAN JELAS -->
+          <div class="results-blocks-stack">
+
+            <!-- BLOK REKOMENDASI FORM -->
+            <div class="result-block-item block-recommendation">
+              <div class="block-top-row">
+                <div class="block-label-group">
+                  <span class="block-badge-pill badge-rec-pill">🎯 FORM e-KINERJA</span>
+                  <span class="block-instruction-text">Pilih aktivitas ini di aplikasi e-Kinerja:</span>
+                </div>
+                <button type="button" id="btnCopyRecName" class="btn-copy-sm" title="Salin nama aktivitas form">
+                  📋 Salin Nama Form
+                </button>
+              </div>
+              <div class="rec-display-area">
+                <h3 id="resActivityName" class="rec-chosen-title">Memuat form aktivitas...</h3>
+                <div class="rec-chosen-meta">
+                  <span id="resTabTypeBadge" class="meta-tag">Aktivitas Utama</span>
+                  <span id="resDurationBadge" class="meta-tag">⏱️ 60 menit</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- BLOK 1: KETERANGAN -->
+            <div class="result-block-item">
+              <div class="block-top-row">
+                <div class="block-label-group">
+                  <span class="block-number-circle">1</span>
+                  <div>
+                    <span class="block-field-name">KETERANGAN</span>
+                    <small class="block-field-desc">Uraian konteks, tahapan pelaksanaan, dan output pekerjaan</small>
+                  </div>
+                </div>
+                <div class="block-actions-group">
+                  <span id="keteranganCounter" class="char-counter-pill valid">0 / 300 - 500</span>
+                  <button type="button" class="btn-variasi-sm btn-regen" data-section="keterangan" title="Ganti variasi naskah">🔄 Variasi</button>
+                  <button type="button" class="btn-copy-highlight btn-copy" data-target="keteranganOutput" title="Salin Keterangan">📋 Salin Keterangan</button>
+                </div>
+              </div>
+              <div class="result-display-wrapper">
+                <textarea id="keteranganOutput" class="form-control result-textarea" rows="5" placeholder="Hasil Keterangan akan muncul di sini..."></textarea>
+              </div>
+            </div>
+
+            <!-- BLOK 2: JUDUL AGENDA -->
+            <div class="result-block-item">
+              <div class="block-top-row">
+                <div class="block-label-group">
+                  <span class="block-number-circle">2</span>
+                  <div>
+                    <span class="block-field-name">JUDUL AGENDA</span>
+                    <small class="block-field-desc">Nama ringkas, formal, dan jelas (maks. 150 karakter)</small>
+                  </div>
+                </div>
+                <div class="block-actions-group">
+                  <span id="judulAgendaCounter" class="char-counter-pill valid">0 / maks 150</span>
+                  <button type="button" class="btn-variasi-sm btn-regen" data-section="judul_agenda" title="Ganti variasi judul">🔄 Variasi</button>
+                  <button type="button" class="btn-copy-highlight btn-copy" data-target="judulAgendaOutput" title="Salin Judul">📋 Salin Judul</button>
+                </div>
+              </div>
+              <div class="result-display-wrapper">
+                <input type="text" id="judulAgendaOutput" class="form-control result-input" placeholder="Hasil Judul Agenda...">
+              </div>
+            </div>
+
+            <!-- BLOK 3: KESIMPULAN / ACTION PLAN -->
+            <div class="result-block-item">
+              <div class="block-top-row">
+                <div class="block-label-group">
+                  <span class="block-number-circle">3</span>
+                  <div>
+                    <span class="block-field-name">KESIMPULAN / ACTION PLAN</span>
+                    <small class="block-field-desc">Alur tindak lanjut berurutan (Pertama, Kedua, Ketiga)</small>
+                  </div>
+                </div>
+                <div class="block-actions-group">
+                  <span id="kesimpulanCounter" class="char-counter-pill valid">0 / 300 - 500</span>
+                  <button type="button" class="btn-variasi-sm btn-regen" data-section="kesimpulan_action_plan" title="Ganti variasi action plan">🔄 Variasi</button>
+                  <button type="button" class="btn-copy-highlight btn-copy" data-target="kesimpulanOutput" title="Salin Kesimpulan">📋 Salin Kesimpulan</button>
+                </div>
+              </div>
+              <div class="result-display-wrapper">
+                <textarea id="kesimpulanOutput" class="form-control result-textarea" rows="5" placeholder="Hasil Kesimpulan & Action Plan..."></textarea>
+              </div>
+            </div>
+
+            <!-- BLOK 4: PESERTA -->
+            <div class="result-block-item">
+              <div class="block-top-row">
+                <div class="block-label-group">
+                  <span class="block-number-circle">4</span>
+                  <div>
+                    <span class="block-field-name">PESERTA</span>
+                    <small class="block-field-desc">Unsur aparatur pelaksana dan pihak terkait</small>
+                  </div>
+                </div>
+                <div class="block-actions-group">
+                  <span id="pesertaCounter" class="char-counter-pill valid">0</span>
+                  <button type="button" class="btn-variasi-sm btn-regen" data-section="peserta" title="Ganti variasi peserta">🔄 Variasi</button>
+                  <button type="button" class="btn-copy-highlight btn-copy" data-target="pesertaOutput" title="Salin Peserta">📋 Salin Peserta</button>
+                </div>
+              </div>
+              <div class="result-display-wrapper">
+                <textarea id="pesertaOutput" class="form-control result-textarea" rows="2" placeholder="Hasil Peserta..."></textarea>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- TAB 2: KATALOG TUPOKSI DISKOMINFO & E-KINERJA                     -->
+      <!-- ================================================================= -->
+      <div id="tab-catalog" class="tab-content">
+        <section class="card catalog-container-card">
+          <div class="catalog-header-bar">
+            <div>
+              <h2 class="section-title">📚 Direktori Aktivitas &amp; Template Resmi</h2>
+              <p class="section-desc">81 Butir Form e-Kinerja &amp; 111 Template Google Sheet Kedinasan</p>
+            </div>
+          </div>
+
+          <!-- SEARCH & KATEGORI FILTER -->
+          <div class="catalog-search-area">
+            <input type="text" id="catalogSearchMain" class="form-control catalog-search-input" placeholder="🔍 Ketik kata kunci (misal: live streaming, apel, liputan, isu, medsos, pers)...">
+            <div class="catalog-category-scroll">
+              <button type="button" class="cat-chip active" data-cat="all">Semua (81)</button>
+              <button type="button" class="cat-chip" data-cat="sheet">✨ 111 Template Sheet</button>
+              <button type="button" class="cat-chip" data-cat="utama">Aktivitas Utama</button>
+              <button type="button" class="cat-chip" data-cat="tambahan">Aktivitas Tambahan</button>
+              <button type="button" class="cat-chip" data-cat="humas">Humas & Medsos</button>
+              <button type="button" class="cat-chip" data-cat="liputan">Liputan & Siaran</button>
+            </div>
+          </div>
+
+          <div id="catalogMainList" class="catalog-cards-grid">
+            <!-- Diisi secara dinamis oleh JavaScript -->
+          </div>
+        </section>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- TAB 3: STANDAR & ATURAN PENGISIAN E-KINERJA                      -->
+      <!-- ================================================================= -->
+      <div id="tab-guidance" class="tab-content">
+        <section class="card guidance-container-card">
+          <div class="guidance-header-bar">
+            <h2 class="section-title">💡 Standar & Ketentuan Pengisian e-Kinerja</h2>
+            <p class="section-desc">Panduan praktis agar pelaporan aktivitas Anda selalu disetujui atasan tanpa penolakan</p>
+          </div>
+
+          <div class="guidance-items-grid">
+            <div class="guide-card">
+              <div class="guide-icon-box">📏</div>
+              <div class="guide-body">
+                <h3>Aturan Mutlak 300 – 500 Karakter</h3>
+                <p>Bagian <strong>Keterangan</strong> dan <strong>Kesimpulan</strong> harus memenuhi minimal 300 karakter. Jika kurang dari 300 karakter, sistem verifikasi aplikasi e-Kinerja akan menolak formulir pelaporan Anda.</p>
+              </div>
+            </div>
+
+            <div class="guide-card">
+              <div class="guide-icon-box">🔄</div>
+              <div class="guide-body">
+                <h3>Pola Action Plan Berurutan</h3>
+                <p>Bagian <strong>Kesimpulan</strong> disukai atasan jika memuat alur tindak lanjut berurutan: <em>"Pertama, melakukan kompilasi berkas... Kedua, menyampaikan laporan kepada pimpinan... Ketiga, menindaklanjuti arahan..."</em>.</p>
+              </div>
+            </div>
+
+            <div class="guide-card">
+              <div class="guide-icon-box">🚫</div>
+              <div class="guide-body">
+                <h3>Bebas Simbol & Format Terlarang</h3>
+                <p>Dilarang menggunakan tanda bullet (•), strip (-), atau tanda bintang (*). Seluruh isian harus berupa <strong>paragraf teks mengalir yang rapi</strong>, santun, dan mencerminkan akuntabilitas kinerja ASN.</p>
+              </div>
+            </div>
+
+            <div class="guide-card">
+              <div class="guide-icon-box">🎯</div>
+              <div class="guide-body">
+                <h3>Pencocokan Tupoksi yang Tepat</h3>
+                <p>Pastikan nama kegiatan diuraikan secara substantif (minimal 15 karakter). Semakin detail konteks yang dituliskan, semakin tepat rekomendasi butir aktivitas e-Kinerja yang dihasilkan.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </main>
+
+    <!-- Footer Note & Branding (Sesuai Versi Ekstensi) -->
+    <footer class="app-footer">
+      <div class="footer-note">
+        <p>💡 <em>Aplikasi tidak mengisi form otomatis. Silakan salin &amp; tempel teks hasil ke portal e-Kinerja instansi Anda.</em></p>
+      </div>
+      <div class="footer-brand-container">
+        <div class="ecosystem-badge">
+          <img src="icons/icon16.png" alt="Beruang Icon" class="ecosystem-mini-icon" onerror="this.style.display='none'">
+          <span class="ecosystem-tag">BANGKIT</span>
+          <span class="ecosystem-name">Beruang Ecosystem</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- MODAL PENGATURAN & PILIHAN MESIN AI -->
+    <div id="settingsModal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <h3 class="modal-title">⚙️ Pengaturan & Mesin AI</h3>
+            <small class="modal-sub">Konfigurasi generator narasi dan memori kedinasan</small>
+          </div>
+          <button type="button" id="btnCloseSettingsModal" class="modal-close-btn">✕</button>
+        </div>
+
+        <div class="modal-body">
+
+          <!-- Pemilihan Mesin AI -->
+          <div class="form-group">
+            <label for="engineSelect" class="form-label">Pilih Mesin Pembuat Narasi:</label>
+            <select id="engineSelect" class="form-control engine-selector">
+              <option value="local" selected>⚡ Mesin Cerdas Kedinasan (100% Gratis - Tanpa API Key & Instan)</option>
+              <option value="groq">⚡ Groq Cloud AI (Built-in Siap Pakai - Opsi ke-2 Cepat & Cerdas)</option>
+              <option value="gemini">✨ Google Gemini API (AI Studio)</option>
+              <option value="openai">🤖 OpenAI ChatGPT (gpt-4o-mini)</option>
+            </select>
+            <p class="field-hint" id="engineHint">
+              100% gratis, tanpa kuota & tanpa API key. Mengembangkan narasi baku langsung di browser.
+            </p>
+          </div>
+
+          <!-- Input API Keys (Dinamis Sesuai Pilihan) -->
+          <div id="groqKeyGroup" class="form-group hidden">
+            <label for="groqApiKeyInput" class="form-label">Groq Cloud API Key (Built-in Siap Pakai):</label>
+            <input type="password" id="groqApiKeyInput" class="form-control" placeholder="gsk_...">
+            <p class="field-hint">✅ Sudah tertanam API Key aktif bawaan. Anda juga dapat menggantinya dengan key pribadi Anda (<a href="https://console.groq.com/keys" target="_blank" rel="noreferrer">console.groq.com/keys ↗</a>).</p>
+          </div>
+
+          <div id="geminiKeyGroup" class="form-group hidden">
+            <label for="geminiApiKeyInput" class="form-label">Google Gemini API Key:</label>
+            <input type="password" id="geminiApiKeyInput" class="form-control" placeholder="AIzaSy...">
+            <p class="field-hint">Dapatkan di <a href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer">aistudio.google.com/apikey ↗</a></p>
+          </div>
+
+          <div id="openaiKeyGroup" class="form-group hidden">
+            <label for="openaiApiKeyInput" class="form-label">OpenAI API Key:</label>
+            <input type="password" id="openaiApiKeyInput" class="form-control" placeholder="sk-...">
+          </div>
+
+          <!-- Memori Cloud Google Sheet -->
+          <div class="form-group cloud-settings-box">
+            <label for="googleSheetUrlInput" class="form-label">Link Publik Google Sheet (Memori 111 Template):</label>
+            <input type="url" id="googleSheetUrlInput" class="form-control" 
+              value="https://docs.google.com/spreadsheets/d/1kaTc1yQU_4AK1YwvyLSfNn3UjvZ3iDeFwED-mgfP0E8/edit?usp=sharing">
+            <div class="sheet-actions-group">
+              <button type="button" id="btnSyncSheetManual" class="btn-sync-action">🔄 Sinkronkan Memori Sekarang</button>
+              <a id="btnOpenSheetLink" href="https://docs.google.com/spreadsheets/d/1kaTc1yQU_4AK1YwvyLSfNn3UjvZ3iDeFwED-mgfP0E8/edit?usp=sharing" target="_blank" class="btn-link-ext">↗️ Buka Sheet</a>
+            </div>
+          </div>
+
+          <!-- Apps Script Webhook URL -->
+          <div class="form-group">
+            <label for="appsScriptUrlInput" class="form-label">URL Webhook Apps Script (Opsional untuk Auto-Simpan):</label>
+            <input type="url" id="appsScriptUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
+            <p class="field-hint">Jika diisi, klik tombol <em>'Simpan ke Sheet'</em> langsung mengirim data ke Google Sheet.</p>
+          </div>
+
+          <!-- Instansi & Batas Karakter -->
+          <div class="form-group">
+            <label for="instansiInput" class="form-label">Nama Instansi / Perangkat Daerah:</label>
+            <input type="text" id="instansiInput" class="form-control" value="Dinas Komunikasi dan Informatika" placeholder="Contoh: Dinas Komunikasi dan Informatika / Badan Kepegawaian Daerah">
+          </div>
+
+          <div class="grid-2col">
+            <div class="form-group">
+              <label for="maxKeteranganInput" class="form-label">Maks. Karakter Keterangan:</label>
+              <input type="number" id="maxKeteranganInput" class="form-control" value="500" min="300" max="1000">
+            </div>
+            <div class="form-group">
+              <label for="maxKesimpulanInput" class="form-label">Maks. Karakter Kesimpulan:</label>
+              <input type="number" id="maxKesimpulanInput" class="form-control" value="500" min="300" max="1000">
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="btnSaveSettings" class="btn-primary-modal">💾 Simpan Pengaturan</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL KATALOG PILIHAN CEPAT -->
+    <div id="catalogModal" class="modal-overlay hidden">
+      <div class="modal-card modal-lg">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title">📚 Pilih Butir Aktivitas e-Kinerja</h3>
+            <small class="modal-sub">Klik salah satu opsi untuk dipasangkan ke formulir Anda</small>
+          </div>
+          <button type="button" id="btnCloseCatalogModal" class="modal-close-btn">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="catalog-modal-search">
+            <input type="text" id="catalogSearchInput" class="form-control" placeholder="🔍 Cari nama aktivitas (misal: apel, live streaming, liputan, rapat, medsos)...">
+          </div>
+          <div id="catalogListContainer" class="catalog-modal-list">
+            <!-- Diisi secara dinamis oleh JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFIKASI RAMAH PENGGUNA -->
+    <div id="toastContainer" class="toast-container hidden">
+      <div id="toastMessage" class="toast-message"></div>
+    </div>
+
+  </div>
+
+  <script src="aktivitas_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
